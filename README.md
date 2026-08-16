@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # Zoha Pasha — Portfolio
 
-A personal portfolio site that opens with a WebGL sequence — a derelict academic hall at night, one lit window, in through the doors and down the hall until the camera pushes into the laptop screen and the site resolves. After that the interface goes quiet: near-black, large type, one ember accent.
+A personal portfolio site that opens with a WebGL sequence — a derelict academic hall at night, one lit window, in through the doors and down the hall until the camera pushes into the laptop screen and the site resolves. After that the interface goes quiet: night-blue, large type, moonlight and lamplight as the two accents.
 
 See `DESIGN.md` for the full design system and `PRODUCT.md` for product context.
 
@@ -20,7 +19,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## The intro sequence
 
-Lives in `components/intro/`. `IntroGate` decides whether it plays at all — it runs **once per session**, and is skipped entirely for visitors who prefer reduced motion or are on a viewport under 480px wide. There is always a visible "Skip intro" control. The site is complete without it.
+Lives in `components/intro/`. `IntroGate` decides whether it plays at all — it runs **once per session**, and is skipped entirely for visitors who prefer reduced motion or are on a viewport under 480px wide. There is always a visible "Skip intro" control, and a "Replay intro" link in the footer. The site is complete without it.
 
 To inspect a specific moment while working on it, append `?introT=` with a value from 0 to 1 — this freezes the camera at that point in the timeline:
 
@@ -37,6 +36,10 @@ npm run dev          # in one terminal
 node capture-screen.mjs
 ```
 
+### The narration
+
+The four lines live in `LINES` at the top of `components/intro/Intro.tsx`. Timing is derived from the copy, so editing the text re-times the typing pass automatically — no need to re-tune it against the camera.
+
 ## Contact form setup (required for the form to send mail)
 
 The form posts to `app/api/contact/route.ts`, which sends via [Resend](https://resend.com) to `zohapasha16@gmail.com`. Without an API key it fails visibly with a clear error rather than pretending to send.
@@ -52,7 +55,4 @@ Needs a host that runs Next.js API routes as serverless functions — [Vercel](h
 
 ## Editing content
 
-Everything factual lives in `lib/data.ts` — profile, research interests, projects, timeline, skills. Update that one file to keep the site current.
-=======
-# Portfolio
->>>>>>> 3772ac3e9937b65a2bc35c98a66af6514c58289e
+Everything factual lives in `lib/data.ts` — profile, focus areas, projects, timeline, skills. Update that one file to keep the site current.

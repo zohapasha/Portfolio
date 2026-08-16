@@ -47,20 +47,6 @@ export default function Hero() {
 
   return (
     <section ref={ref} id="top" className="relative min-h-[100svh] flex flex-col px-6 md:px-10">
-      {/* A hairline grid, so the page sits on visible structure rather than in space. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-6 right-6 md:left-10 md:right-10 hidden lg:grid grid-cols-12"
-      >
-        {Array.from({ length: 13 }, (_, i) => (
-          <span
-            key={i}
-            className="col-span-1 border-l border-line/40 last:border-r"
-            style={{ gridColumn: i + 1 }}
-          />
-        ))}
-      </div>
-
       <motion.div style={{ y: nameY, opacity: fade }} className="relative flex-1 flex flex-col justify-center pt-28">
         <motion.p
           custom={0}

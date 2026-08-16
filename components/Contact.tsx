@@ -24,6 +24,7 @@ export default function Contact() {
       name: String(data.get("name") ?? ""),
       email: String(data.get("email") ?? ""),
       message: String(data.get("message") ?? ""),
+      company: String(data.get("company") ?? ""),
     };
 
     setStatus("sending");
@@ -74,7 +75,12 @@ export default function Contact() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            <form onSubmit={handleSubmit} className="relative flex flex-col gap-8">
+              <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
+                <label htmlFor="company">Company</label>
+                <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+              </div>
+
               <label className="flex flex-col gap-2">
                 <span className="font-data text-xs uppercase tracking-[0.14em] text-mist">
                   Name
