@@ -12,6 +12,25 @@ type Status = "idle" | "sending" | "sent" | "error";
 const field =
   "w-full border-b border-line bg-transparent py-3 text-lg outline-none focus:border-moon transition-colors";
 
+/**
+ * Formspree takes the submission straight from the browser, so there is no API
+ * route and no server secret. The endpoint id is public by design — it lives in
+ * the form action on every Formspree site — which is why this is a
+ * NEXT_PUBLIC_ var rather than a server-only one.
+ */
+const ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+
+/** Formspree answers errors as either `{ errors: [{ message }] }` or `{ error }`. */
+function readError(body: unknown) {
+  if (body && typeof body === "object") {
+    const b = body as { errors?: { message?: string }[]; error?: string };
+    const first = b.errors?.map((e) => e.message).filter(Boolean).join(", ");
+    if (first) return first;
+    if (b.error) return b.error;
+  }
+  return "Something went wrong. Please try again.";
+}
+
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -19,34 +38,40 @@ export default function Contact() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const payload = {
-      name: String(data.get("name") ?? ""),
-      email: String(data.get("email") ?? ""),
-      message: String(data.get("message") ?? ""),
-      company: String(data.get("company") ?? ""),
-    };
 
+    if (!ENDPOINT) {
+      setStatus("error");
+      setErrorMsg("The contact form is not set up yet, so this cannot be sent.");
+      return;
+    }
+
+    const data = new FormData(form);
     setStatus("sending");
     setErrorMsg("");
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          message: String(data.get("message") ?? ""),
+          _gotcha: String(data.get("_gotcha") ?? ""),
+          _subject: `Portfolio message from ${String(data.get("name") ?? "")}`,
+        }),
       });
-      const result = await res.json();
+
       if (!res.ok) {
         setStatus("error");
-        setErrorMsg(result.error ?? "Something went wrong. Please try again.");
+        setErrorMsg(readError(await res.json().catch(() => null)));
         return;
       }
       setStatus("sent");
       form.reset();
     } catch {
       setStatus("error");
-      setErrorMsg("Network error — the message didn't go through.");
+      setErrorMsg("Something went wrong and the message did not send. Please try again.");
     }
   };
 
@@ -55,7 +80,7 @@ export default function Contact() {
 
       <Reveal>
         <TextReveal as="h2" className="font-display display-lg max-w-5xl" stagger={0.035}>
-          Working on something in AI, machine learning, or computer vision? I&rsquo;d like to hear about it.
+          Are you working on something in AI, machine learning or computer vision? I would love to hear about it.
         </TextReveal>
       </Reveal>
 
@@ -66,7 +91,7 @@ export default function Contact() {
               <p className="font-data text-xs uppercase tracking-[0.18em] text-moon mb-3">
                 Message sent
               </p>
-              <p className="text-xl">Thanks — that reached my inbox. I&rsquo;ll reply soon.</p>
+              <p className="text-xl">Thank you. That landed in my inbox and I will reply soon.</p>
               <button
                 onClick={() => setStatus("idle")}
                 className="mt-6 font-data text-xs uppercase tracking-[0.14em] border border-line px-5 py-3 hover:border-parchment transition-colors cursor-pointer"
@@ -77,8 +102,8 @@ export default function Contact() {
           ) : (
             <form onSubmit={handleSubmit} className="relative flex flex-col gap-8">
               <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
-                <label htmlFor="company">Company</label>
-                <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+                <label htmlFor="_gotcha">Company</label>
+                <input id="_gotcha" name="_gotcha" type="text" tabIndex={-1} autoComplete="off" />
               </div>
 
               <label className="flex flex-col gap-2">
@@ -110,7 +135,7 @@ export default function Contact() {
                   maxLength={4000}
                   rows={4}
                   className={`${field} resize-none`}
-                  placeholder="What are you working on?"
+                  placeholder="Tell me what you are working on"
                 />
               </label>
 

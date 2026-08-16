@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotion } from "@/lib/reduced-motion";
 import { useRef } from "react";
 import Section from "./Section";
 import TextReveal from "./TextReveal";
@@ -58,7 +59,7 @@ export default function About() {
       <div className="mt-20 md:mt-28 grid md:grid-cols-12 gap-12">
         <div className="md:col-span-7">
           <h3 className="font-data text-xs uppercase tracking-[0.22em] text-mist mb-10">
-            Education &amp; experience
+            Education and experience
           </h3>
 
           <ol ref={trackRef} className="relative flex flex-col pl-8">

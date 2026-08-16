@@ -96,16 +96,20 @@ export default function Work() {
                 </dl>
               ) : null}
 
-              <ul className="mt-6 flex flex-wrap gap-x-2 gap-y-2">
-                {p.stack.map((s) => (
-                  <li
-                    key={s}
-                    className="font-data text-xs text-mist border border-line px-2.5 py-1 transition-colors duration-300 hover:border-moon hover:text-moon"
-                  >
-                    {s}
-                  </li>
-                ))}
-              </ul>
+              {p.stack ? (
+                <ul className="mt-6 flex flex-wrap gap-x-2 gap-y-2">
+                  {p.stack.map((s) => (
+                    <li
+                      key={s}
+                      className="font-data text-xs text-mist border border-line px-2.5 py-1 transition-colors duration-300 hover:border-moon hover:text-moon"
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              ) : p.stackNote ? (
+                <p className="mt-6 font-data text-xs text-mist/70">{p.stackNote}</p>
+              ) : null}
             </div>
           </motion.article>
         ))}

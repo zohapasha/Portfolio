@@ -1,15 +1,15 @@
 export const profile = {
   name: "Zoha Pasha",
-  tagline: "I build systems, then take them apart to find out what they're actually doing.",
-  role: "CS student · AI / machine learning / computer vision",
+  tagline: "I chase questions, fall down rabbit holes, and build my way out.",
+  role: "CS student · AI, machine learning and computer vision",
   location: "Lahore, Pakistan",
   email: "zohapasha16@gmail.com",
   linkedin: "https://www.linkedin.com/in/zoha-pasha-a35022276",
   github: "https://github.com/zohapasha",
   about: [
-    "I'm a final-year Computer Science student at FAST-NUCES Lahore, sitting at a 3.86 CGPA with four Dean's List and two Rector's List placements.",
-    "Most of what I build comes from the same impulse: I want to see inside the thing. That's how I ended up writing a debugger that reads an LLM's confidence token by token, reproducing a super-resolution architecture from a paper to understand why channel attention works, and wiring behaviour trees into game NPCs to watch them make decisions.",
-    "I'm heading into AI and machine learning work. Engineering roles and graduate study are both on the table and I'm keeping both open while I finish my degree — computer vision, language models, and deep learning are the areas I want to keep building in.",
+    "I am in my final year of Computer Science at FAST-NUCES Lahore. My CGPA is 3.86. I have made the Dean's List four times and the Rector's List twice.",
+    "Most of what I build starts the same way. I want to see inside the thing. That is how I ended up writing a debugger that reads a language model's confidence one word at a time. It is why I rebuilt an image model from a research paper instead of just reading it. It is why I put decision trees into game characters, so I could watch them choose what to do.",
+    "I am heading into AI and machine learning work. I am keeping my options open between engineering jobs and graduate study while I finish my degree. Computer vision, language models and deep learning are the areas I want to keep building in.",
   ],
 };
 
@@ -26,25 +26,25 @@ export const focuses: Focus[] = [
     id: "vision",
     label: "01",
     title: "Computer Vision",
-    body: "Getting a model to recover detail that isn't obviously in the pixels.",
+    body: "Getting a model to find and make sense of what is actually in a picture.",
     detail:
-      "This is where my final-year work sits. I implemented a published DSen2-based super-resolution architecture for Sentinel-2 satellite imagery — channel attention, high-frequency filtering, and the full preprocessing and evaluation pipeline. Working through someone else's architecture line by line taught me more about why it works than reading about it did.",
+      "This is the area my final year project sits in. I am building a framework that uses a language model to help find several objects at once in a scene, from either a written description or an example image, for cameras that know where they are pointing. It is due in 2027. Before that I rebuilt a published model that sharpens Sentinel-2 satellite images, scaled down to run on my own machine. Going through someone else's design line by line taught me far more than reading about it ever did.",
   },
   {
     id: "llms",
     label: "02",
     title: "Language Models",
-    body: "Building things with them — and checking what they are actually doing.",
+    body: "Building things with them, and checking what they are really doing.",
     detail:
-      "I built a debugger that surfaces a model's behaviour per token: confidence, entropy, attention weights, hallucination risk. Then I benchmarked whether its stated confidence could be trusted, and it couldn't — roughly 32% calibration error on what it claimed against 15% on its own token probabilities. I'm interested in the whole stack around these models, from wiring them into an application to understanding why they behave the way they do.",
+      "I made a tool that shows what a language model is doing as it writes, one word at a time. It shows how confident the model is, where it is paying attention, and how likely it is to be making something up. Then I tested whether the model's own confidence could be trusted. It could not. When it said how sure it was, it was off by about 32 percent. Its own internal numbers were off by about 15 percent. I like working across all of this, from building with these models to working out why they behave the way they do.",
   },
   {
     id: "deep-learning",
     label: "03",
     title: "Deep Learning",
-    body: "From the gradient up, not from the API down.",
+    body: "Starting from the maths, not from someone else's library.",
     detail:
-      "Neural networks, CNNs, ensembles, reinforcement learning — through coursework, Andrew Ng's specialization, and building things until they worked. I'd rather implement a method and watch it fail than take a library's word for it. It is the layer underneath everything else here.",
+      "Neural networks, CNNs, ensembles and reinforcement learning. Some of it came from my coursework, some from Andrew Ng's specialisation, and a lot of it from building things until they finally worked. I would rather write a method myself and watch it break than trust a library to be right. This is the layer sitting underneath everything else on this page.",
   },
 ];
 
@@ -53,14 +53,27 @@ export type Project = {
   name: string;
   kind: string;
   year: string;
-  stack: string[];
+  stack?: string[];
   summary: string;
   points: string[];
+  stackNote?: string;
   metrics?: { label: string; value: string }[];
   featured?: boolean;
 };
 
 export const projects: Project[] = [
+  {
+    slug: "multi-object-localisation",
+    name: "LLM Assisted Multi Object Localisation",
+    kind: "Final year project",
+    year: "2027",
+    summary:
+      "My final year project, which I am working on now. It is a framework that uses a language model to help find several objects at once in a scene. You can describe what you are looking for in words or show it a picture, and it works with cameras that know where they are pointing.",
+    points: [
+      "Still in progress. It is due to be finished in 2027.",
+    ],
+    stackNote: "Still deciding on parts of the stack.",
+  },
   {
     slug: "llm-reasoning-debugger",
     name: "LLM Reasoning Debugger",
@@ -68,30 +81,30 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["Python", "FastAPI", "Qwen2.5-1.5B"],
     summary:
-      "A local web app that opens up a language model's reasoning token by token — confidence, entropy, attention weights, and hallucination risk in a terminal-style interface.",
+      "A small web app that opens up how a language model thinks. It shows you, one word at a time, how confident the model is, where it is looking, and how likely it is to be making things up.",
     points: [
-      "Served Qwen2.5-1.5B-Instruct behind a FastAPI backend, capturing per-token logits and attention.",
-      "Built a 28-question benchmark and scored it with AUROC and expected calibration error.",
-      "Found the model's stated confidence was badly calibrated (~32% ECE) against its own token probabilities (~15% ECE).",
+      "Ran Qwen2.5-1.5B-Instruct behind a FastAPI backend and captured what it was doing at every word.",
+      "Wrote a set of 28 test questions and scored the answers properly.",
+      "Found that the model is bad at judging itself. What it claimed about its own confidence was much further off than its own internal numbers.",
     ],
     metrics: [
-      { label: "ECE, stated confidence", value: "~32%" },
-      { label: "ECE, token probability", value: "~15%" },
+      { label: "error in what it claimed", value: "32%" },
+      { label: "error in its own numbers", value: "15%" },
     ],
     featured: true,
   },
   {
     slug: "sentinel-2-super-resolution",
-    name: "Sentinel-2 Super-Resolution",
+    name: "Sentinel-2 Super Resolution",
     kind: "Paper implementation",
     year: "2025",
     stack: ["Python", "PyTorch", "CNNs"],
     summary:
-      "An implementation of a published DSen2-based super-resolution architecture for Sentinel-2 satellite imagery, reproduced end to end to understand how channel attention and high-frequency enhancement actually behave.",
+      "A model that sharpens blurry Sentinel-2 satellite images. I built it by following a published paper and scaled it down so it would run on my own machine, so I could understand exactly why the design works.",
     points: [
-      "Implemented the paper's channel attention mechanism and high-pass frequency filtering.",
-      "Ran the full pipeline myself: dataset preprocessing, training, and quantitative evaluation.",
-      "This is a reproduction of existing published work, not an original architecture.",
+      "Built the parts the paper describes, including how the model decides which details matter.",
+      "Scaled the whole pipeline down to fit the hardware I had, then prepared the data, trained it and measured the results.",
+      "This is my version of a pipeline that already exists. The original design is not mine, and this is not my final year project.",
     ],
   },
   {
@@ -101,24 +114,24 @@ export const projects: Project[] = [
     year: "2025",
     stack: ["Unreal Engine 5", "C++", "Blueprints"],
     summary:
-      "A story-mode murder mystery where the NPCs decide for themselves — behaviour trees driving patrol, chase, and attack states, with language-model dialogue on top.",
+      "A murder mystery game where the characters decide things for themselves. They patrol, chase and attack on their own, and they talk to you using a language model.",
     points: [
-      "Designed behaviour trees for NPC patrol, chase, and attack state transitions.",
-      "Wired pathfinding into level geometry so pursuit reads as deliberate rather than scripted.",
-      "Integrated an LLM for reactive dialogue during the investigation.",
+      "Built the logic that makes characters switch between patrolling, chasing and attacking.",
+      "Set up how they find their way around the level, so a chase feels deliberate instead of scripted.",
+      "Hooked up a language model so characters can talk back while you investigate.",
     ],
   },
   {
     slug: "airline-management",
     name: "Airline Management System",
-    kind: "Full-stack platform",
+    kind: "Full stack platform",
     year: "2025",
     stack: ["Next.js", "Tailwind CSS", "SQL Server"],
     summary:
-      "A booking, scheduling, and administration platform built on a relational database with a Next.js frontend.",
+      "A booking and scheduling system for an airline, with an admin side for staff. It runs on a proper database behind a Next.js frontend.",
     points: [
-      "Modelled flights, bookings, and schedules in SQL Server.",
-      "Built the booking and admin flows end to end.",
+      "Designed how flights, bookings and schedules are stored in SQL Server.",
+      "Built the booking flow and the admin screens from start to finish.",
     ],
   },
   {
@@ -128,10 +141,10 @@ export const projects: Project[] = [
     year: "2024",
     stack: ["WPF", "C#", "Supabase"],
     summary:
-      "A past-paper search platform for FAST students, with an AI chatbot and Supabase handling auth and storage.",
+      "A desktop app that helps FAST students search old exam papers. It has a chatbot built in, and Supabase handles logins and file storage.",
     points: [
-      "Built the desktop client in WPF and C#.",
-      "Indexed past papers for fast retrieval and added a chatbot for student queries.",
+      "Built the desktop app in WPF and C#.",
+      "Made the papers searchable, and added a chatbot so students can just ask.",
     ],
   },
   {
@@ -141,8 +154,8 @@ export const projects: Project[] = [
     year: "2024",
     stack: ["C++", "Qt"],
     summary:
-      "A desktop social app implementing friend requests, messaging, and user profiles.",
-    points: ["Built friend-request graphs, profile state, and messaging in Qt."],
+      "A desktop social app with friend requests, messaging and user profiles.",
+    points: ["Built the friend system, the profiles and the messaging in Qt."],
   },
 ];
 
@@ -156,32 +169,32 @@ export type TimelineEntry = {
 
 export const timeline: TimelineEntry[] = [
   {
-    when: "2023 — now",
+    when: "2023 to now",
     kind: "Education",
     title: "BS Computer Science",
     org: "FAST-NUCES Lahore",
-    detail: ["CGPA 3.86 / 4.00", "Dean's List ×4 · Rector's List ×2", "Coursework: Applied Machine Learning"],
+    detail: ["CGPA 3.86 out of 4.00", "Dean's List four times, Rector's List twice", "Coursework in Applied Machine Learning"],
   },
   {
     when: "2025",
     kind: "Experience",
     title: "Developer Intern",
     org: "Clear Wave Information Technologies",
-    detail: ["Frontend features in Next.js and Tailwind CSS", "ERP implementation and testing support"],
+    detail: ["Built frontend features in Next.js and Tailwind CSS", "Helped set up and test an ERP system"],
   },
   {
     when: "2024",
     kind: "Experience",
     title: "Frontend Development Intern",
     org: "OSOL Technologies",
-    detail: ["Responsive UI components in HTML, CSS, and JavaScript", "REST API integration support"],
+    detail: ["Built page components in HTML, CSS and JavaScript", "Helped connect those pages to the backend"],
   },
   {
     when: "2026",
     kind: "Certification",
     title: "Machine Learning Specialization",
-    org: "DeepLearning.AI — Andrew Ng",
-    detail: ["Supervised learning, neural networks, ensembles", "Unsupervised learning, recommenders, RL"],
+    org: "DeepLearning.AI, taught by Andrew Ng",
+    detail: ["Supervised learning, neural networks and ensembles", "Unsupervised learning, recommenders and reinforcement learning"],
   },
 ];
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotion } from "@/lib/reduced-motion";
 import { useRef } from "react";
 import { profile } from "@/lib/data";
 
@@ -31,9 +32,9 @@ function NameLine({ text, delay }: { text: string; delay: number }) {
 
 /** Facts that a reviewer skims for, given their own cells rather than a sentence. */
 const facts = [
-  { k: "CGPA", v: "3.86", note: "of 4.00" },
-  { k: "Honours", v: "6", note: "Dean's ×4 · Rector's ×2" },
-  { k: "Next", v: "2026", note: "AI/ML roles · grad study" },
+  { k: "CGPA", v: "3.86", note: "out of 4.00" },
+  { k: "Honours", v: "6", note: "Dean's List four times, Rector's List twice" },
+  { k: "Next", v: "2026", note: "a job in AI, or grad school" },
 ];
 
 export default function Hero() {

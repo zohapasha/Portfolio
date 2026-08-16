@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/lib/reduced-motion";
 
 /**
  * The page's one motion idea, stated once: words rise out of the dark into

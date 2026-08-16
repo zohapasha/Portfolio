@@ -18,7 +18,9 @@ A personal portfolio site for Zoha Pasha that establishes credibility fast, show
 
 ## Positioning
 
-Not a generic "full-stack student" portfolio. Her differentiator is the combination of (a) genuine ML/AI depth — she doesn't just call APIs, she built a token-level LLM hallucination/confidence debugger with real calibration metrics (AUROC, ECE) and a CNN super-resolution research pipeline from scratch — with (b) hands-on breadth across game dev (Unreal Engine 5, AI-driven NPCs), full-stack web, and systems-level languages (C++, C#, Assembly). The throughline is an investigator's instinct: she builds tools to find out what's really happening inside a system (why did the model hallucinate, why did the NPC make that choice), rather than trusting the surface behaviour. Computer vision is where her final-year work sits; language models and deep learning are the other two areas she wants to keep building in. State these as areas of work, never as a declared specialism.
+Not a generic "full-stack student" portfolio. Her differentiator is the combination of (a) genuine ML/AI depth — she doesn't just call APIs, she built a token-level LLM hallucination/confidence debugger with real calibration metrics (AUROC, ECE) and a CNN super-resolution research pipeline from scratch — with (b) hands-on breadth across game dev (Unreal Engine 5, AI-driven NPCs), full-stack web, and systems-level languages (C++, C#, Assembly). The throughline is an investigator's instinct: she builds tools to find out what's really happening inside a system (why did the model hallucinate, why did the NPC make that choice), rather than trusting the surface behaviour. Computer vision is where her final year project sits; language models and deep learning are the other two areas she wants to keep building in. State these as areas of work, never as a declared specialism.
+
+Her final year project is an LLM assisted framework for multi object localisation using text and image queries, for position aware cameras. It is in progress and due in 2027. The Sentinel-2 super resolution work is NOT her final year project: it is an implementation of an already published pipeline, scaled down to run on her own machine. This distinction was corrected once already, so do not reintroduce it.
 
 ## Operating Context
 
@@ -27,7 +29,7 @@ Single-visitor browsing session, arrived via a resume link, LinkedIn profile, or
 ## Capabilities and Constraints
 
 - Content (education, research, projects, experience, certifications, skills) is static and sourced from her CV (`c:\Users\Zoha\Downloads\zoha_cv.pdf`) — do not fabricate projects, metrics, employers, or dates beyond what the CV states.
-- Contact form must deliver real email to zohapasha16@gmail.com via a Next.js API route calling Resend. Requires a `RESEND_API_KEY` env var the user provisions before the form works in production; until then the route should fail gracefully with a clear error, not silently pretend to succeed.
+- Contact form must deliver real email to zohapasha16@gmail.com. It posts from the browser to Formspree (chosen over Resend, which cannot deliver to an arbitrary recipient without a verified domain the user does not own). Requires a `NEXT_PUBLIC_FORMSPREE_ENDPOINT` the user provisions; until then the form must fail visibly with a clear message, never silently pretend to succeed. There is no server code, so the site builds fully static.
 - No live demo URLs or screenshots were supplied for the projects — link out to GitHub (github.com/zohapasha) rather than inventing hosted demo links or repo-specific URLs that weren't confirmed.
 - Phone number appears on the CV but is not to be published on the public site (privacy); email is the public contact channel, primarily via the on-site form rather than a raw mailto address.
 - Deploy target is expected to be Vercel or an equivalent platform that supports Next.js serverless/edge API routes (required for the contact form to function).

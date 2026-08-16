@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/lib/reduced-motion";
 
 /**
  * Three authored diagrams, one per research interest. They are the section's
