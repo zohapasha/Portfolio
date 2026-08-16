@@ -14,11 +14,17 @@ const field =
 
 /**
  * Formspree takes the submission straight from the browser, so there is no API
- * route and no server secret. The endpoint id is public by design — it lives in
- * the form action on every Formspree site — which is why this is a
- * NEXT_PUBLIC_ var rather than a server-only one.
+ * route and no server secret. The endpoint id is public by design: it lives in
+ * the form action on every Formspree site, so it is checked in here as the
+ * default. That way a deploy works with no dashboard configuration at all.
+ *
+ * NEXT_PUBLIC_FORMSPREE_ENDPOINT still wins if it is set, which is how you
+ * point a preview build at a throwaway form without touching this file. Both
+ * are inlined at build time, so a change to either needs a rebuild.
  */
-const ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+const FALLBACK_ENDPOINT = "https://formspree.io/f/xoeakagb";
+const ENDPOINT =
+  process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT?.trim() || FALLBACK_ENDPOINT;
 
 /** Formspree answers errors as either `{ errors: [{ message }] }` or `{ error }`. */
 function readError(body: unknown) {
@@ -38,13 +44,6 @@ export default function Contact() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-
-    if (!ENDPOINT) {
-      setStatus("error");
-      setErrorMsg("The contact form is not set up yet, so this cannot be sent.");
-      return;
-    }
-
     const data = new FormData(form);
     setStatus("sending");
     setErrorMsg("");

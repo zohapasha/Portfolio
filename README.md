@@ -40,16 +40,15 @@ node capture-screen.mjs
 
 The four lines live in `LINES` at the top of `components/intro/Intro.tsx`. Timing is derived from the copy, so editing the text re-times the typing pass automatically — no need to re-tune it against the camera.
 
-## Contact form setup (required for the form to deliver)
+## Contact form
 
-The form posts straight from the browser to [Formspree](https://formspree.io) — there is no API route and no server secret. Until an endpoint is set it fails visibly with a clear message rather than pretending to send.
+The form posts straight from the browser to [Formspree](https://formspree.io) — there is no API route and no server secret.
 
-1. Sign up at [formspree.io](https://formspree.io), then **+ Add New → New Form**.
-2. Set the form's recipient to `zohapasha16@gmail.com` and copy the endpoint — it looks like `https://formspree.io/f/xyzabcde`.
-3. Copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_FORMSPREE_ENDPOINT` to that full URL.
-4. Restart the dev server, then submit the form once. Formspree emails you a one-time confirmation link the first time a new form receives a submission — click it, or nothing will be delivered afterwards.
+**No setup is required.** The live endpoint is checked into `components/Contact.tsx` as `FALLBACK_ENDPOINT`, so a fresh clone and every deploy reach the real form with nothing configured. The endpoint id is **not a secret**: on an ordinary Formspree site it sits in the form's `action` attribute, so it ships to the browser either way. That is why it carries the `NEXT_PUBLIC_` prefix.
 
-The endpoint id is **not a secret**: on an ordinary Formspree site it sits in the form's `action` attribute. That is why it carries the `NEXT_PUBLIC_` prefix and is safe to commit to a private repo or set in a hosting dashboard.
+`NEXT_PUBLIC_FORMSPREE_ENDPOINT` overrides the default when it is set — useful for pointing a preview build at a throwaway form. Both are inlined at build time, so changing either needs a rebuild, not just a restart.
+
+Formspree emails a one-time confirmation link the first time a **new** form receives a submission. Until that link is clicked the site will say the message sent while nothing is delivered, so submit once and confirm after creating any new form.
 
 Spam handling is Formspree's: every form gets reCAPTCHA, and the form ships a `_gotcha` honeypot field (off-screen, `tabIndex={-1}`) that Formspree silently discards when a bot fills it in.
 
@@ -57,7 +56,7 @@ Spam handling is Formspree's: every form gets reCAPTCHA, and the form ships a `_
 
 With the form on Formspree there is no server code left, so `next build` emits a fully static site and it can go on any static host — [Vercel](https://vercel.com/new), Netlify, Cloudflare Pages, GitHub Pages.
 
-Set `NEXT_PUBLIC_FORMSPREE_ENDPOINT` in the hosting dashboard's environment variables. It is inlined at build time, so a change to it needs a rebuild, not just a restart.
+No environment variables are needed. Push the repo, point the host at it, and the contact form works on the first deploy.
 
 ## Editing content
 
