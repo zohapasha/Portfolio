@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zoha Pasha — Portfolio
 
-## Getting Started
+A personal portfolio site that opens with a WebGL sequence — a derelict academic hall at night, one lit window, in through the doors and down the hall until the camera pushes into the laptop screen and the site resolves. After that the interface goes quiet: near-black, large type, one ember accent.
 
-First, run the development server:
+See `DESIGN.md` for the full design system and `PRODUCT.md` for product context.
+
+## Stack
+
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · React Three Fiber / three.js · Framer Motion · Resend
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## The intro sequence
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Lives in `components/intro/`. `IntroGate` decides whether it plays at all — it runs **once per session**, and is skipped entirely for visitors who prefer reduced motion or are on a viewport under 480px wide. There is always a visible "Skip intro" control. The site is complete without it.
 
-## Learn More
+To inspect a specific moment while working on it, append `?introT=` with a value from 0 to 1 — this freezes the camera at that point in the timeline:
 
-To learn more about Next.js, take a look at the following resources:
+```
+http://localhost:3000/?introT=0.45
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### The laptop screen
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The laptop in the intro shows a real capture of the site's own hero, stored at `public/intro/site-screen.png`. If you change the hero, regenerate it or the intro will show the old one:
 
-## Deploy on Vercel
+```bash
+npm run dev          # in one terminal
+node capture-screen.mjs
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contact form setup (required for the form to send mail)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The form posts to `app/api/contact/route.ts`, which sends via [Resend](https://resend.com) to `zohapasha16@gmail.com`. Without an API key it fails visibly with a clear error rather than pretending to send.
+
+1. Create a free Resend account (100 emails/day) and get an API key.
+2. Copy `.env.local.example` to `.env.local` and set `RESEND_API_KEY`.
+3. By default mail sends from Resend's shared sandbox address (`onboarding@resend.dev`), which only delivers to the address you signed up with — fine for testing, **not** for production.
+4. For production, verify your own domain in Resend and set `RESEND_FROM_ADDRESS`.
+
+## Deploying
+
+Needs a host that runs Next.js API routes as serverless functions — [Vercel](https://vercel.com/new) is simplest and free for this. Set `RESEND_API_KEY` (and `RESEND_FROM_ADDRESS`) as environment variables in the hosting dashboard; they are never committed.
+
+## Editing content
+
+Everything factual lives in `lib/data.ts` — profile, research interests, projects, timeline, skills. Update that one file to keep the site current.

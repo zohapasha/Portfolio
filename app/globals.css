@@ -1,26 +1,198 @@
 @import "tailwindcss";
 
+/**
+ * The palette is lifted straight out of the intro's lighting so the site and
+ * the film are one world: the night sky is the ground, moonlight and lamplight
+ * are the two accents, and the paper pinned above her desk is the type colour.
+ * Every hue here exists somewhere in that scene.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --night-deep: #070a12;
+  --night: #0b0e1a;
+  --slate: #141a2b;
+  --slate-2: #1b2236;
+
+  --parchment: #efeae0;
+  --mist: #a2abc2;
+  --line: #232b40;
+
+  /* The two lights. Cool leads; warm answers. */
+  --moon: #93b4e8;
+  --lamp: #e9b172;
+  /* The red pen that circles the deadline on her wall. */
+  --ink: #d0604a;
+  /* The dusk band between night and horizon. */
+  --dusk: #a894d4;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-night-deep: var(--night-deep);
+  --color-night: var(--night);
+  --color-slate: var(--slate);
+  --color-slate-2: var(--slate-2);
+  --color-parchment: var(--parchment);
+  --color-mist: var(--mist);
+  --color-line: var(--line);
+  --color-moon: var(--moon);
+  --color-lamp: var(--lamp);
+  --color-ink: var(--ink);
+  --color-dusk: var(--dusk);
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-archivo);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--night);
+  scrollbar-color: var(--line) var(--night);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--night);
+  color: var(--parchment);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--moon);
+  color: var(--night-deep);
+}
+
+::placeholder {
+  color: var(--mist);
+  opacity: 0.65;
+}
+
+:focus-visible {
+  outline: 2px solid var(--moon);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--night);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--line);
+  border: 2px solid var(--night);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--mist);
+}
+
+/* Locks scrolling while the intro sequence is on screen. */
+body[data-intro="running"] {
+  overflow: hidden;
+}
+
+.font-display {
+  font-family: var(--font-bricolage), var(--font-archivo), system-ui, sans-serif;
+}
+
+.font-data {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.display-xl {
+  font-size: clamp(3rem, 11vw, 9.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+.display-lg {
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+
+.display-md {
+  font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.measure {
+  max-width: 62ch;
+}
+
+/* Oversized outlined numerals for the section openers. */
+.display-ghost {
+  font-size: clamp(4rem, 8vw, 7rem);
+  line-height: 0.8;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line);
+}
+
+/* Hard blink, not a fade — a fading caret does not read as a typewriter. */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret {
+  animation: caret-blink 1s steps(1, end) infinite;
+}
+
+/**
+ * Type that arrives out of the dark, the way the room does. Each line sits in
+ * its own clipping box and rises into it, so the reveal reads as light finding
+ * the words rather than as a block sliding around.
+ */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* A quiet drift for the ambient motes, matching the dust in the lamp light. */
+@keyframes mote-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--mote-peak, 0.5);
+  }
+  88% {
+    opacity: var(--mote-peak, 0.5);
+  }
+  100% {
+    transform: translate3d(var(--mote-x, 14px), -110px, 0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
