@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Zoha Pasha — Portfolio
 
 A personal portfolio site that opens with a WebGL sequence — a derelict academic hall at night, one lit window, in through the doors and down the hall until the camera pushes into the laptop screen and the site resolves. After that the interface goes quiet: near-black, large type, one ember accent.
@@ -52,3 +53,6 @@ Needs a host that runs Next.js API routes as serverless functions — [Vercel](h
 ## Editing content
 
 Everything factual lives in `lib/data.ts` — profile, research interests, projects, timeline, skills. Update that one file to keep the site current.
+=======
+# Portfolio
+>>>>>>> 3772ac3e9937b65a2bc35c98a66af6514c58289e
